@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="BSDSAssignment1Server" />
+        <module name="cs6650-assignment1" />
       </profile>
     </annotationProcessing>
   </component>

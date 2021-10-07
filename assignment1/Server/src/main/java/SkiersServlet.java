@@ -34,6 +34,8 @@ public class SkiersServlet extends HttpServlet {
       throws ServletException, IOException {
     response.setContentType("text/plain");
     String urlPath = request.getPathInfo();
+    System.out.println("Inside doPost: " + urlPath);;
+
     // check we have a URL!
     if (urlPath == null || urlPath.isEmpty()) {
       response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -85,8 +87,8 @@ public class SkiersServlet extends HttpServlet {
       return false;
     }
     if (!urlParts[2].equalsIgnoreCase("seasons") ||
-        !urlParts[4].equalsIgnoreCase("day") ||
-        !urlParts[6].equalsIgnoreCase("skier")) {
+        !urlParts[4].equalsIgnoreCase("days") ||
+        !urlParts[6].equalsIgnoreCase("skiers")) {
       return false;
     }
     return true;
