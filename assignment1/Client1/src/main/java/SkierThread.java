@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class SkierThread extends Thread {
 
-  private final String BASE_PATH = "";
+  private final String BASE_PATH = "http://localhost:8080/BSDSAssignment1Server_war_exploded/";
 
   private int resortId; //id of the resort like 127
   private String seasonId; // Year like 2021
@@ -46,14 +46,17 @@ public class SkierThread extends Thread {
     int failedRequests = 0;
     SkiersApi skiersApi = new SkiersApi();
     ApiClient apiClient = skiersApi.getApiClient();
+
     apiClient.setBasePath(BASE_PATH);
+    //apiClient.setBasePath("http://localhost:8080/BSDSAssignment1Server_war_exploded");
+
     //making post request to the server
     for (int i = 0; i < numPostRequests; ++i) {
       LiftRide liftRide = new LiftRide();
       liftRide.time(ThreadLocalRandom.current().nextInt(StartTime, endTime + 1));
       liftRide.liftID(ThreadLocalRandom.current().nextInt(this.liftId) + 1);
       int skierId = ThreadLocalRandom.current()
-          .nextInt(this.startingSkierId, this.endingSkierId + 1);
+          .nextInt(this.endingSkierId - this.startingSkierId) + this.startingSkierId;
       try {
         skiersApi.writeNewLiftRide(liftRide,
             this.resortId, this.seasonId, this.dayId, skierId);
@@ -63,13 +66,22 @@ public class SkierThread extends Thread {
 
         ++successfulRequests;
       } catch (ApiException e) {
-        System.err.println("Api Exception while trying to call SkiersApi:writeNewLiftRide");
+        System.err.println(
+            "Api Exception while trying to call SkiersApi:writeNewLiftRide e.getCode() = "
+                + e.getCode() +
+                " e.getMessage() = " + e.getMessage() + " e.getCause() =  " + e.getCause());
         ++failedRequests;
         e.printStackTrace();
       }
     }
     this.results.addFailedRequests(failedRequests);
     this.results.addSuccessfulRequests(successfulRequests);
+    try {
+      this.countDownLatch.countDown();
+      this.masterLatch.countDown();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }
 

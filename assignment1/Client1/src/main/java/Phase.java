@@ -36,9 +36,12 @@ public class Phase {
 
   public void run() throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(this.numWaitingThreads);
+
     for (int i = 0; i < this.numThreads; ++i) {
       int startingSkierId = (i * (this.numSkiers / this.numThreads)) + 1;
       int endingSkierId = (i + 1) * (this.numSkiers / this.numThreads);
+      //System.out.println("startingSkierId: "+ startingSkierId);
+      //System.out.println("endingSkierId: "+endingSkierId );
       //creating the thread that will send numPostRequests post requests
       Thread skierThread = new SkierThread(resortId, seasonId, dayId, startTime, endTime,
           startingSkierId,

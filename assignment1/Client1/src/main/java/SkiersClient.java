@@ -36,6 +36,7 @@ public class SkiersClient {
     //new results object for storing the result
     Results results = new Results();
     //creating phase 1, phase2, phase 3
+    System.out.println("Est requests: " + (newNumThreads*phase1Requests + parameters.getNumThreads()*phase2Requests+newNumThreads*phase3Requests));
     Phase phase1 = new Phase(20, SEASON_ID, DAY_ID, newNumThreads, parameters.getNumSkiers(),
         parameters.getNumLifts(), phase1Requests, (int) (Math.ceil(newNumThreads / 10.0)), 1, 90,
         results, masterLatch);
@@ -70,9 +71,11 @@ public class SkiersClient {
       CountDownLatch masterLatch)
       throws InterruptedException {
     long start = System.currentTimeMillis();
+
     phase1.run();
     phase2.run();
     phase3.run();
+    System.out.println("All 3 phases running");
     masterLatch.await();
     long end = System.currentTimeMillis();
     return (end - start);
