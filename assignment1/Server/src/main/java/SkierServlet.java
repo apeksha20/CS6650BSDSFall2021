@@ -4,8 +4,8 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
-@WebServlet(name = "SkiersServlet", value = "/Skiers/*")
-public class SkiersServlet extends HttpServlet {
+@WebServlet(name = "SkierServlet", value = "/skiers/*")
+public class SkierServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -93,4 +93,5 @@ public class SkiersServlet extends HttpServlet {
     }
     return true;
   }
+
 }

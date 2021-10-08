@@ -4,10 +4,8 @@ public class CommandLineParameter {
   private int numSkiers;
   private int numLifts;
   private int numRuns;
-  private int port;
+  private String ipAddress;
 
-  public CommandLineParameter() {
-  }
   public int getNumThreads() {
     return numThreads;
   }
@@ -40,11 +38,11 @@ public class CommandLineParameter {
     this.numRuns = numRuns;
   }
 
-  public int getPort() {
-    return port;
+  public String getIpAddress() {
+    return ipAddress;
   }
 
-  public void setPort(int port) {
-    this.port = port;
+  public void setIpAddress(String ipAddress) {
+    this.ipAddress = ipAddress;
   }
 }

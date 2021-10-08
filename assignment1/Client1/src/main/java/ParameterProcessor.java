@@ -42,7 +42,7 @@ public class ParameterProcessor {
     parameters.setNumLifts(Integer.valueOf(properties.getProperty("numLifts")));
     parameters.setNumRuns(Integer.valueOf(properties.getProperty("numRuns")));
     parameters.setNumSkiers(Integer.valueOf(properties.getProperty("numSkiers")));
-    parameters.setPort(Integer.valueOf(properties.getProperty("ipAddress")));
+    parameters.setIpAddress(properties.getProperty("ipAddress"));
     return parameters;
   }
 

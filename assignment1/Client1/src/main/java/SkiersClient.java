@@ -8,6 +8,7 @@ public class SkiersClient {
   private static final float PHASE_1_MULTIPLYING_FACTOR = 0.2f;
   private static final float PHASE_2_MULTIPLYING_FACTOR = 0.6f;
   private static final float PHASE_3_MULTIPLYING_FACTOR = 0.1f;
+  private static final int RESORT_ID = 20;
   private static final String SEASON_ID = "2021";
   private static final String DAY_ID = "21";
 
@@ -19,16 +20,10 @@ public class SkiersClient {
     System.out.println("numRuns: " + parameters.getNumRuns());
     System.out.println("numLifts: " + parameters.getNumLifts());
     System.out.println("numSkiers: " + parameters.getNumSkiers());
+    System.out.println("ipAddress: " + parameters.getIpAddress());
 
     //calculating thread and request count for different phases
     int newNumThreads = (int) Math.round(parameters.getNumThreads() / 4.0);
-    int phase1Requests = (int) Math.round(
-        parameters.getNumRuns() * PHASE_1_MULTIPLYING_FACTOR * (parameters.getNumSkiers() / (
-            newNumThreads * 1.0)));
-    int phase2Requests = (int) Math.round(
-        parameters.getNumRuns() * PHASE_2_MULTIPLYING_FACTOR * (parameters.getNumSkiers() / (
-            parameters.getNumThreads() * 1.0)));
-    int phase3Requests = Math.round(parameters.getNumRuns() * PHASE_3_MULTIPLYING_FACTOR);
     int totalThreads = newNumThreads * 2
         + parameters.getNumThreads();// 1 and 3 phase creates newNumThreads and phase 2 creates numThreads
     //creating master latch so that all threads i.e. total threads complete
@@ -36,18 +31,33 @@ public class SkiersClient {
     //new results object for storing the result
     Results results = new Results();
     //creating phase 1, phase2, phase 3
-    System.out.println("Est requests: " + (newNumThreads*phase1Requests + parameters.getNumThreads()*phase2Requests+newNumThreads*phase3Requests));
-    Phase phase1 = new Phase(20, SEASON_ID, DAY_ID, newNumThreads, parameters.getNumSkiers(),
-        parameters.getNumLifts(), phase1Requests, (int) (Math.ceil(newNumThreads / 10.0)), 1, 90,
+
+    int phase1Requests = (int) Math.round(
+        parameters.getNumRuns() * PHASE_1_MULTIPLYING_FACTOR * (parameters.getNumSkiers() / (
+            newNumThreads * 1.0)));
+    Phase phase1 = new Phase(RESORT_ID, SEASON_ID, DAY_ID, newNumThreads, parameters.getNumSkiers(),
+        parameters.getNumLifts(), phase1Requests, (int) (Math.ceil(newNumThreads / 10.0)),
+        parameters.getIpAddress(), 1, 90,
         results, masterLatch);
-    Phase phase2 = new Phase(20, SEASON_ID, DAY_ID, parameters.getNumThreads(),
+
+    int phase2Requests = (int) Math.round(
+        parameters.getNumRuns() * PHASE_2_MULTIPLYING_FACTOR * (parameters.getNumSkiers() / (
+            parameters.getNumThreads() * 1.0)));
+    Phase phase2 = new Phase(RESORT_ID, SEASON_ID, DAY_ID, parameters.getNumThreads(),
         parameters.getNumSkiers(),
         parameters.getNumLifts(), phase2Requests,
-        (int) (Math.ceil(parameters.getNumThreads() / 10.0)), 91, 360,
+        (int) (Math.ceil(parameters.getNumThreads() / 10.0)), parameters.getIpAddress(), 91, 360,
         results, masterLatch);
-    Phase phase3 = new Phase(20, SEASON_ID, DAY_ID, newNumThreads, parameters.getNumSkiers(),
-        parameters.getNumLifts(), phase3Requests, (int) (Math.ceil(newNumThreads / 10.0)), 361, 420,
+
+    int phase3Requests = Math.round(parameters.getNumRuns() * PHASE_3_MULTIPLYING_FACTOR);
+    Phase phase3 = new Phase(RESORT_ID, SEASON_ID, DAY_ID, newNumThreads, parameters.getNumSkiers(),
+        parameters.getNumLifts(), phase3Requests, (int) (Math.ceil(newNumThreads / 10.0)),
+        parameters.getIpAddress(), 361, 420,
         results, masterLatch);
+
+    System.out.println("Est requests: " + (newNumThreads * phase1Requests
+        + parameters.getNumThreads() * phase2Requests + newNumThreads * phase3Requests));
+
     //calculating wall time by running the three phases
     try {
       Long wallTime = calculateWallTime(phase1, phase2, phase3, masterLatch);
@@ -63,8 +73,9 @@ public class SkiersClient {
     System.out.println("Results:");
     System.out.println("Number of Successful requests sent: " + results.getSuccessfulRequests());
     System.out.println("Number of Failed requests sent: " + results.getFailedRequests());
-    System.out.println("Total runtime(Wall Time): "+ wallTime);
-    System.out.println("Total Throughput: " + (results.getSuccessfulRequests() + results.getFailedRequests())/wallTime);
+    System.out.println("Total runtime(Wall Time): " + wallTime);
+    System.out.println("Total Throughput: "
+        + (float)(results.getSuccessfulRequests() + results.getFailedRequests()) / wallTime);
   }
 
   private static Long calculateWallTime(Phase phase1, Phase phase2, Phase phase3,
