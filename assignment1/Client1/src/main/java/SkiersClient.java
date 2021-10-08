@@ -73,7 +73,7 @@ public class SkiersClient {
     System.out.println("Results:");
     System.out.println("Number of Successful requests sent: " + results.getSuccessfulRequests());
     System.out.println("Number of Failed requests sent: " + results.getFailedRequests());
-    System.out.println("Total runtime(Wall Time): " + wallTime);
+    System.out.println("Total runtime(Wall Time): " + wallTime/1000 + " seconds");
     System.out.println("Total Throughput: "
         + (float)(results.getSuccessfulRequests() + results.getFailedRequests()) / wallTime);
   }
