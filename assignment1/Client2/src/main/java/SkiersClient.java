@@ -105,13 +105,13 @@ public class SkiersClient {
     System.out.println("Results:");
     System.out.println("Number of Successful requests sent: " + results.getSuccessfulRequests());
     System.out.println("Number of Failed requests sent: " + results.getFailedRequests());
-    System.out.println("Total runtime(Wall Time): " + wallTime/1000 + " seconds");
+    System.out.println("Total runtime(Wall Time): " + wallTime + " seconds");
     System.out.println("Total Throughput: "
         + (float)(results.getSuccessfulRequests() + results.getFailedRequests()) / wallTime);
-    System.out.println("Mean response time: " + results.getMeanResponse());
-    System.out.println("Median response time: " + results.getMedianResponseTime());
-    System.out.println("Max response time: " + Collections.max(results.getResponseTime()));
-    System.out.println("p99 response time: " + results.getPercentileResponse(99));
+    System.out.println("Mean response time: " + results.getMeanResponse() + " milliseconds");
+    System.out.println("Median response time: " + results.getMedianResponseTime() + " milliseconds");
+    System.out.println("Max response time: " + Collections.max(results.getResponseTime()) + " milliseconds");
+    System.out.println("p99 response time: " + results.getPercentileResponse(99) + " milliseconds");
   }
 
   private static Long calculateWallTime(Phase phase1, Phase phase2, Phase phase3,
@@ -125,6 +125,6 @@ public class SkiersClient {
     //System.out.println("All 3 phases running");
     masterLatch.await();
     long end = System.currentTimeMillis();
-    return (end - start);
+    return (end - start)/1000;
   }
 }

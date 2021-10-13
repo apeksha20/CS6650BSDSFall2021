@@ -79,13 +79,15 @@ public class SkierThread extends Thread {
           break;
         } catch (ApiException e) {
           responseCode = e.getCode();
-          System.err.println(
-              "Api Exception while trying to call SkiersApi:writeNewLiftRide e.getCode() = "
-                  + e.getCode() +
-                  " e.getMessage() = " + e.getMessage() + " e.getCause() =  " + e.getCause());
-          e.printStackTrace();
+          System.err.println("Exception: " + e.getMessage());
+//          System.err.println(
+//              "Api Exception while trying to call SkiersApi:writeNewLiftRide e.getCode() = "
+//                  + e.getCode() +
+//                  " e.getMessage() = " + e.getMessage() + " e.getCause() =  " + e.getCause());
+//          e.printStackTrace();
           if (e.getCode() / 100 == 4 | e.getCode() / 100 == 5) {
             --numTries;
+            System.err.println("Retry remaining " + numTries);
           }
         }
       } while (numTries > 0);
