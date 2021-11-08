@@ -18,9 +18,9 @@ public class ChannelFactory extends BasePooledObjectFactory<Channel> {
   public ChannelFactory() throws IOException, TimeoutException {
     ConnectionFactory connectionFactory  =new ConnectionFactory();
     //TODO change the fields or read from a property file
-    connectionFactory.setHost("localhost");
-    connectionFactory.setUsername("guest");
-    connectionFactory.setPassword("guest");
+    connectionFactory.setHost("52.207.253.81");
+    connectionFactory.setUsername("guest1");
+    connectionFactory.setPassword("guest1");
     connection = connectionFactory.newConnection();
   }
 

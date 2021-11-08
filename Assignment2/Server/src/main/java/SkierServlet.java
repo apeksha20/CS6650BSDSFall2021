@@ -97,6 +97,7 @@ public class SkierServlet extends HttpServlet {
       pool.returnObject(channel);
       return 1;
     } catch (Exception e) {
+     e.printStackTrace();
       System.err.println("Failed to send data to RabbitMQ");
       return 0;
     }
